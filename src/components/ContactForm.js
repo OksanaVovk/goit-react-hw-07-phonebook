@@ -1,12 +1,15 @@
 import 'react-native-get-random-values';
 import { nanoid } from 'nanoid';
+import { useFetchContactsQuery } from 'redux/reducer';
 import { useState } from 'react';
 import { useAddContactMutation } from 'redux/reducer';
 import Spinner from './Spinner';
 
-export default function ContactForm({ onSubmit }) {
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const { data } = useFetchContactsQuery();
 
   let nameId = nanoid();
   let numbId = nanoid();
@@ -33,7 +36,12 @@ export default function ContactForm({ onSubmit }) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    createContact({ name: name, phone: number });
+    const isRepead = data.some(contact =>
+      contact.name.toLowerCase().includes(name.toLowerCase())
+    );
+    isRepead
+      ? alert(`${name} is already in contacts`)
+      : createContact({ name: name, phone: number });
     reset();
   };
 
@@ -63,7 +71,7 @@ export default function ContactForm({ onSubmit }) {
           required
         />
       </label>
-      <button className="main_button" type="submit">
+      <button className="main_button" type="submit" disabled={isLoading}>
         {isLoading && <Spinner />}
         Add contact
       </button>

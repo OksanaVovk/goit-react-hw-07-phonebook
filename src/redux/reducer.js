@@ -1,7 +1,7 @@
-// import { createReducer, combineReducers } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // import { nanoid } from 'nanoid';
-// import { add, remove, changeFilter } from './actions';
+import { changeFilter } from './actions';
 // import { persistReducer } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage';
 
@@ -11,9 +11,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 //   [remove]: (state, action) => state.filter(({ id }) => id !== action.payload),
 // });
 
-// const filter = createReducer('', {
-//   [changeFilter]: (_, action) => action.payload,
-// });
+export const filter = createReducer('', {
+  [changeFilter]: (_, action) => action.payload,
+});
 
 // const contactsReducer = combineReducers({
 //   items,

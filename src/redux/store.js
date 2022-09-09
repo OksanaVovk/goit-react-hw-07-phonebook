@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { contactsApi } from './reducer';
-// import { persistedContactsReducer } from './reducer';
+import { filter } from './reducer';
 
 export const store = configureStore({
   reducer: {
-    // contacts: persistedContactsReducer,
+    filter: filter,
     [contactsApi.reducerPath]: contactsApi.reducer,
   },
 
