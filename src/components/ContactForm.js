@@ -1,6 +1,8 @@
 import 'react-native-get-random-values';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { useAddContactMutation } from 'redux/reducer';
+import Spinner from './Spinner';
 
 export default function ContactForm({ onSubmit }) {
   const [name, setName] = useState('');
@@ -8,6 +10,7 @@ export default function ContactForm({ onSubmit }) {
 
   let nameId = nanoid();
   let numbId = nanoid();
+  const [createContact, { isLoading }] = useAddContactMutation();
 
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
@@ -15,7 +18,7 @@ export default function ContactForm({ onSubmit }) {
       case 'name':
         setName(value);
         break;
-      case 'number':
+      case 'phone':
         setNumber(value);
         break;
       default:
@@ -23,15 +26,15 @@ export default function ContactForm({ onSubmit }) {
     }
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    onSubmit({ number, name });
-    reset();
-  };
-
   const reset = () => {
     setName('');
     setNumber('');
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    createContact({ name: name, phone: number });
+    reset();
   };
 
   return (
@@ -39,7 +42,6 @@ export default function ContactForm({ onSubmit }) {
       <label htmlFor={nameId}>
         Name
         <input
-          id={nameId}
           type="text"
           value={name}
           name="name"
@@ -52,10 +54,9 @@ export default function ContactForm({ onSubmit }) {
       <label htmlFor={numbId}>
         Number
         <input
-          id={numbId}
           type="tel"
           value={number}
-          name="number"
+          name="phone"
           onChange={handleInputChange}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
@@ -63,6 +64,7 @@ export default function ContactForm({ onSubmit }) {
         />
       </label>
       <button className="main_button" type="submit">
+        {isLoading && <Spinner />}
         Add contact
       </button>
     </form>

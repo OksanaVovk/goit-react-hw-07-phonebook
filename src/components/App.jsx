@@ -1,7 +1,7 @@
 // import { useSelector, useDispatch } from 'react-redux';
 // import { add, remove, changeFilter } from '../redux/actions';
 import { useFetchContactsQuery } from 'redux/reducer';
-// import ContactForm from './ContactForm';
+import ContactForm from './ContactForm';
 // import Filter from './Filter';
 import ContactList from './ContactList';
 import 'react-native-get-random-values';
@@ -39,18 +39,18 @@ export default function App() {
   //   );
   // };
 
-  const deleteCont = contId => {
-    console.log(`delete ${contId}`);
-  };
+  // const deleteCont = contId => {
+  //   console.log(`delete ${contId}`);
+  // };
 
   // const visiableContacts = getVisiableContacts();
   return (
     <div>
       <h1>Phonebook</h1>
-      {/* <ContactForm /> */}
+      <ContactForm />
       <h2>Contacts</h2>
       {/* <Filter id={filtId} value={valueFilter} onChange={handleFilterChange} /> */}
-      <ContactList contactArray={data} onDeleteCont={deleteCont} />
+      {data && <ContactList contactArray={data} />}
     </div>
   );
 }
