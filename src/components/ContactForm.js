@@ -4,6 +4,7 @@ import { useFetchContactsQuery } from 'redux/reducer';
 import { useState } from 'react';
 import { useAddContactMutation } from 'redux/reducer';
 import Spinner from './Spinner';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
@@ -34,14 +35,22 @@ export default function ContactForm() {
     setNumber('');
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const isRepead = data.some(contact =>
       contact.name.toLowerCase().includes(name.toLowerCase())
     );
-    isRepead
-      ? alert(`${name} is already in contacts`)
-      : createContact({ name: name, phone: number });
+    if (isRepead) {
+      Notify.failure(`${name} is already in contacts`);
+    } else {
+      try {
+        await createContact({ name: name, phone: number });
+        Notify.success('A new contact has been created');
+      } catch {
+        console.log(Error);
+        Notify.warning('Contact could not be saved');
+      }
+    }
     reset();
   };
 
